@@ -1,0 +1,17 @@
+apiVersion: klot.io/v1
+kind: App
+metadata:
+  name: chore-button.nandy.io
+  description: Chore Button - Nandy I/O
+spec:
+  source:
+    site: github.com
+    repo: nandy-io/chore-button-daemon
+  manifests:
+  - path: kubernetes/namespace.yaml
+  - path: kubernetes/daemon.yaml
+  requires:
+  - site: github.com
+    repo: nandy-io/chore
+  - site: github.com
+    repo: nandy-io/button
