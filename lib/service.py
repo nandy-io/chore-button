@@ -21,7 +21,7 @@ class Daemon(object):
         self.redis = redis.StrictRedis(host=os.environ['REDIS_HOST'], port=int(os.environ['REDIS_PORT']))
         self.channel = os.environ['REDIS_CHANNEL']
 
-        self.chore = f"{os.environ['CHORE_API']}/routine"
+        self.chore_api = os.environ['CHORE_API']
 
         self.pubsub = None
 
@@ -32,6 +32,18 @@ class Daemon(object):
 
         self.pubsub = self.redis.pubsub()
         self.pubsub.subscribe(self.channel) 
+
+    def node(self, routine):
+
+        if "button" in routine["data"] and "node" in routine["data"]["button"]:
+            return routine["data"]["button"]["node"]
+
+        person = requests.get(f"{self.chore_api}/person/{routine['person_id']}").json()["person"]
+
+        if "button" in person["data"] and "node" in person["data"]["button"]:
+            return person["data"]["button"]["node"]
+
+        return None
 
     def process(self):
         """
@@ -46,9 +58,9 @@ class Daemon(object):
         data = json.loads(message['data'])
 
         if data["type"] == "rising" and data.get("node"):
-            for routine in requests.get(f"{self.chore}?status=opened").json()["routines"]:
-                if "button" in routine["data"] and data["node"] == routine["data"]["button"].get("node"):
-                    requests.patch(f"{self.chore}/{routine['id']}/next").raise_for_status()
+            for routine in requests.get(f"{self.chore_api}/routine?status=opened").json()["routines"]:
+                if data["node"] == self.node(routine):
+                    requests.patch(f"{self.chore_api}/routine/{routine['id']}/next").raise_for_status()
 
     def run(self):
         """
