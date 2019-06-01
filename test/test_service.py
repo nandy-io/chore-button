@@ -58,7 +58,7 @@ class TestService(unittest.TestCase):
         self.assertEqual(daemon.redis.host, "most.com")
         self.assertEqual(daemon.redis.port, 667)
         self.assertEqual(daemon.channel, "stuff")
-        self.assertEqual(daemon.chore, "http://boast.com/routine")
+        self.assertEqual(daemon.chore_api, "http://boast.com")
         self.assertEqual(daemon.sleep, 0.7)
 
     def test_subscribe(self):
@@ -67,6 +67,50 @@ class TestService(unittest.TestCase):
 
         self.assertEqual(self.daemon.redis, self.daemon.pubsub)
         self.assertEqual(self.daemon.redis.channel, "stuff")
+
+    @unittest.mock.patch("requests.get")
+    def test_process(self, mock_get):
+
+        mock_get.return_value.json.return_value = {
+            "person": {
+                "id": 1,
+                "data": {
+                    "button": {
+                        "node": "dump"
+                    }
+                }
+            }
+        }
+
+        self.assertEqual("bump", self.daemon.node({
+            "id": 1,
+            "data": {
+                "button": {
+                    "node": "bump"
+                }
+            }
+        }))
+        mock_get.assert_not_called()
+
+        self.assertEqual("dump", self.daemon.node({
+            "id": 1,
+            "data": {}
+        }))
+        mock_get.assert_has_calls([
+            unittest.mock.call("http://boast.com/person/1"),
+            unittest.mock.call().json()
+        ])
+
+        mock_get.return_value.json.return_value = {
+            "person": {
+                "id": 1,
+                "data": {}
+            }
+        }
+        self.assertIsNone(self.daemon.node({
+            "id": 1,
+            "data": {}
+        }))
 
     @unittest.mock.patch("requests.get")
     @unittest.mock.patch("requests.patch")
@@ -116,6 +160,10 @@ class TestService(unittest.TestCase):
         self.daemon.process()
 
         self.daemon.process()
+        mock_get.assert_has_calls([
+            unittest.mock.call("http://boast.com/routine?status=opened"),
+            unittest.mock.call().json()
+        ])
         mock_patch.assert_has_calls([
             unittest.mock.call("http://boast.com/routine/1/next"),
             unittest.mock.call().raise_for_status()
