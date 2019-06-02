@@ -14,4 +14,4 @@ spec:
   - site: github.com
     repo: nandy-io/chore
   - site: github.com
-    repo: nandy-io/button
+    repo: nandy-io/button-daemon
