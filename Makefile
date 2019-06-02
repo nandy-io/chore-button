@@ -10,7 +10,7 @@ ENVIRONMENT=-e SLEEP=0.1 \
 			-e REDIS_HOST=redis-klotio \
 			-e REDIS_PORT=6379 \
 			-e REDIS_CHANNEL=nandy.io/button \
-			-e SPEECH_API=http://chore-api.nandyio
+			-e CHORE_API=http://chore-api.nandyio
 
 .PHONY: cross build network shell test run start stop push install update remove reset tag
 

@@ -69,7 +69,7 @@ class TestService(unittest.TestCase):
         self.assertEqual(self.daemon.redis.channel, "stuff")
 
     @unittest.mock.patch("requests.get")
-    def test_process(self, mock_get):
+    def test_node(self, mock_get):
 
         mock_get.return_value.json.return_value = {
             "person": {
@@ -83,7 +83,7 @@ class TestService(unittest.TestCase):
         }
 
         self.assertEqual("bump", self.daemon.node({
-            "id": 1,
+            "person_id": 1,
             "data": {
                 "button": {
                     "node": "bump"
@@ -93,7 +93,7 @@ class TestService(unittest.TestCase):
         mock_get.assert_not_called()
 
         self.assertEqual("dump", self.daemon.node({
-            "id": 1,
+            "person_id": 1,
             "data": {}
         }))
         mock_get.assert_has_calls([
@@ -108,7 +108,7 @@ class TestService(unittest.TestCase):
             }
         }
         self.assertIsNone(self.daemon.node({
-            "id": 1,
+            "person_id": 1,
             "data": {}
         }))
 
