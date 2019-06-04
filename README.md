@@ -1,2 +1,2 @@
-# chore-button-daemon
-Chore Button Daemon
+# chore-button
+Chore Button App
