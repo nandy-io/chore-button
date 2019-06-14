@@ -30,3 +30,5 @@ spec:
           value: http://api.chore-nandy-io
         - name: SLEEP
           value: "0.1"
+        - name: PYTHONUNBUFFERED
+          value: '1'
