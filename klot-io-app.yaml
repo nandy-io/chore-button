@@ -1,11 +1,10 @@
 apiVersion: klot.io/v1
-kind: App
+kind: KlotIOApp
 metadata:
   name: chore-button.nandy.io
-  version: v0.1
-  description: Chore Button - Nandy I/O
 spec:
   namespace: chore-button-nandy-io
+  description: Chore Button - Nandy I/O
   manifests:
   - path: kubernetes/namespace.yaml
   - path: daemon/kubernetes/daemon.yaml
