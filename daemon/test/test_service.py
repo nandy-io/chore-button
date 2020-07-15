@@ -74,20 +74,16 @@ class TestService(unittest.TestCase):
         mock_get.return_value.json.return_value = {
             "person": {
                 "id": 1,
-                "data": {
-                    "button": {
-                        "node": "dump"
-                    }
+                "chore-button.nandy.io": {
+                    "node": "dump"
                 }
             }
         }
 
         self.assertEqual("bump", self.daemon.node({
             "person_id": 1,
-            "data": {
-                "button": {
-                    "node": "bump"
-                }
+            "chore-button.nandy.io": {
+                "node": "bump"
             }
         }))
         mock_get.assert_not_called()
@@ -122,18 +118,14 @@ class TestService(unittest.TestCase):
             "routines": [
                 {
                     "id": 1,
-                    "data": {
-                        "button": {
-                            "node": "bump"
-                        }
+                    "chore-button.nandy.io": {
+                        "node": "bump"
                     }
                 },
                 {
                     "id": 2,
-                    "data": {
-                        "button": {
-                            "node": "dump"
-                        }
+                    "chore-button.nandy.io": {
+                        "node": "dump"
                     }
                 }
             ]
@@ -180,10 +172,8 @@ class TestService(unittest.TestCase):
             "routines": [
                 {
                     "id": 1,
-                    "data": {
-                        "button": {
-                            "node": "bump"
-                        }
+                    "chore-button.nandy.io": {
+                        "node": "bump"
                     }
                 }
             ]

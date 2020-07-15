@@ -13,6 +13,9 @@ spec:
     source:
       site: github.com
       repo: nandy-io/chore
+    integrations:
+    - path: daemon/forms/person.fields.yaml
+    - path: daemon/forms/routine.fields.yaml
   - name: button.nandy.io
     source:
       site: github.com
