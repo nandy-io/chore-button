@@ -75,7 +75,7 @@ class TestService(unittest.TestCase):
             "person": {
                 "id": 1,
                 "data": {
-                    "button": {
+                    "chore-button.nandy.io": {
                         "node": "dump"
                     }
                 }
@@ -85,7 +85,7 @@ class TestService(unittest.TestCase):
         self.assertEqual("bump", self.daemon.node({
             "person_id": 1,
             "data": {
-                "button": {
+                "chore-button.nandy.io": {
                     "node": "bump"
                 }
             }
@@ -123,7 +123,7 @@ class TestService(unittest.TestCase):
                 {
                     "id": 1,
                     "data": {
-                        "button": {
+                        "chore-button.nandy.io": {
                             "node": "bump"
                         }
                     }
@@ -131,7 +131,7 @@ class TestService(unittest.TestCase):
                 {
                     "id": 2,
                     "data": {
-                        "button": {
+                        "chore-button.nandy.io": {
                             "node": "dump"
                         }
                     }
@@ -181,7 +181,7 @@ class TestService(unittest.TestCase):
                 {
                     "id": 1,
                     "data": {
-                        "button": {
+                        "chore-button.nandy.io": {
                             "node": "bump"
                         }
                     }

@@ -1,6 +1,6 @@
 ACCOUNT=nandyio
 IMAGE=chore-button-daemon
-VERSION?=0.1
+VERSION?=0.2
 NAME=$(IMAGE)-$(ACCOUNT)
 NETWORK=klot.io
 VOLUMES=-v ${PWD}/lib/:/opt/service/lib/ \
@@ -16,7 +16,7 @@ ENVIRONMENT=-e SLEEP=0.1 \
 
 cross:
 	docker run --rm --privileged multiarch/qemu-user-static:register --reset
-	
+
 build:
 	docker build . -t $(ACCOUNT)/$(IMAGE):$(VERSION)
 
@@ -51,4 +51,3 @@ remove:
 	-kubectl delete -f kubernetes/daemon.yaml
 
 reset: remove install
-

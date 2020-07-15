@@ -1,0 +1,8 @@
+description: Button settings
+fields:
+- name: node
+  integrate:
+    node:
+      app: button.nandy.io
+      label: button
+      value: enabled

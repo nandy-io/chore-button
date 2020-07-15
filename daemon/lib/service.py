@@ -31,19 +31,16 @@ class Daemon(object):
         """
 
         self.pubsub = self.redis.pubsub()
-        self.pubsub.subscribe(self.channel) 
+        self.pubsub.subscribe(self.channel)
 
     def node(self, routine):
 
-        if "button" in routine["data"] and "node" in routine["data"]["button"]:
-            return routine["data"]["button"]["node"]
+        if "node" in routine["data"].get("chore-button.nandy.io", {}):
+            return routine["data"]["chore-button.nandy.io"]["node"]
 
         person = requests.get(f"{self.chore_api}/person/{routine['person_id']}").json()["person"]
 
-        if "button" in person["data"] and "node" in person["data"]["button"]:
-            return person["data"]["button"]["node"]
-
-        return None
+        return person["data"].get("chore-button.nandy.io", {}).get("node")
 
     def process(self):
         """
