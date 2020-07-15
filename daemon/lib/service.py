@@ -35,12 +35,12 @@ class Daemon(object):
 
     def node(self, routine):
 
-        if "node" in routine["data"].get("chore-button.nandy.io", {}):
-            return routine["data"]["chore-button.nandy.io"]["node"]
+        if "node" in routine.get("chore-button.nandy.io", {}):
+            return routine["chore-button.nandy.io"]["node"]
 
         person = requests.get(f"{self.chore_api}/person/{routine['person_id']}").json()["person"]
 
-        return person["data"].get("chore-button.nandy.io", {}).get("node")
+        return person.get("chore-button.nandy.io", {}).get("node")
 
     def process(self):
         """
