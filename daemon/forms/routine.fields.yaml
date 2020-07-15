@@ -6,3 +6,4 @@ fields:
       app: button.nandy.io
       label: button
       value: enabled
+  optional: true
