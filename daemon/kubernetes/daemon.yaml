@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: daemon
-        image: docker.io/nandyio/chore-button-daemon:0.1
+        image: docker.io/nandyio/chore-button-daemon:0.2
         imagePullPolicy: Always
         env:
         - name: REDIS_HOST
