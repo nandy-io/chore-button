@@ -6,7 +6,6 @@ spec:
   namespace: chore-button-nandy-io
   description: Chore Button - Nandy I/O
   manifests:
-  - path: kubernetes/namespace.yaml
   - path: daemon/kubernetes/daemon.yaml
   requires:
   - name: chore.nandy.io
