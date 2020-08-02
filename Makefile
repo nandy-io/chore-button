@@ -1,6 +1,6 @@
 VERSION?=0.3
 TILT_PORT=26766
-.PHONY: up down integrate disintegrate tag untag
+.PHONY: integrate disintegrate up down tag untag
 
 integrate:
 	cp daemon/forms/person.fields.yaml ../people/config/integration_chore-button.nandy.io_person.fields.yaml
