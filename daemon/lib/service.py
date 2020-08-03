@@ -7,7 +7,6 @@ import time
 import json
 import redis
 import requests
-import traceback
 
 class Daemon(object):
     """
@@ -67,9 +66,5 @@ class Daemon(object):
         self.subscribe()
 
         while True:
-            try:
-                self.process()
-                time.sleep(self.sleep)
-            except Exception as exception:
-                print(str(exception))
-                print(traceback.format_exc())
+            self.process()
+            time.sleep(self.sleep)

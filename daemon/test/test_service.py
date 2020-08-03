@@ -164,9 +164,7 @@ class TestService(unittest.TestCase):
     @unittest.mock.patch("requests.get")
     @unittest.mock.patch("requests.patch")
     @unittest.mock.patch("service.time.sleep")
-    @unittest.mock.patch("traceback.format_exc")
-    @unittest.mock.patch('builtins.print')
-    def test_run(self, mock_print, mock_traceback, mock_sleep, mock_patch, mock_get):
+    def test_run(self, mock_sleep, mock_patch, mock_get):
 
         mock_get.return_value.json.return_value = {
             "routines": [
@@ -194,10 +192,9 @@ class TestService(unittest.TestCase):
             }
         ]
 
-        mock_sleep.side_effect = [Exception("whoops"), Exception("adaisy")]
-        mock_traceback.side_effect = ["spirograph", Exception("doh")]
+        mock_sleep.side_effect = [Exception("whoops")]
 
-        self.assertRaisesRegex(Exception, "doh", self.daemon.run)
+        self.assertRaisesRegex(Exception, "whoops", self.daemon.run)
 
         self.assertEqual(self.daemon.redis, self.daemon.pubsub)
         self.assertEqual(self.daemon.redis.channel, "stuff")
@@ -208,9 +205,3 @@ class TestService(unittest.TestCase):
         ])
 
         mock_sleep.assert_called_with(0.7)
-
-        mock_print.assert_has_calls([
-            unittest.mock.call("whoops"),
-            unittest.mock.call("spirograph"),
-            unittest.mock.call("adaisy")
-        ])
