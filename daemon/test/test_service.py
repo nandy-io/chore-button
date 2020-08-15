@@ -1,5 +1,6 @@
 import unittest
 import unittest.mock
+import klotio_unittest
 
 import os
 import json
@@ -29,7 +30,7 @@ class MockRedis(object):
         return self.messages.pop(0)
 
 
-class TestService(unittest.TestCase):
+class TestService(klotio_unittest.TestCase):
 
     @unittest.mock.patch.dict(os.environ, {
         "REDIS_HOST": "most.com",
@@ -38,7 +39,8 @@ class TestService(unittest.TestCase):
         "CHORE_API": "http://boast.com",
         "SLEEP": "0.7"
     })
-    @unittest.mock.patch("redis.StrictRedis", MockRedis)
+    @unittest.mock.patch("redis.Redis", klotio_unittest.MockRedis)
+    @unittest.mock.patch("klotio.logger", klotio_unittest.MockLogger)
     def setUp(self):
 
         self.daemon = service.Daemon()
@@ -50,7 +52,8 @@ class TestService(unittest.TestCase):
         "CHORE_API": "http://boast.com",
         "SLEEP": "0.7"
     })
-    @unittest.mock.patch("redis.StrictRedis", MockRedis)
+    @unittest.mock.patch("redis.Redis", klotio_unittest.MockRedis)
+    @unittest.mock.patch("klotio.logger", klotio_unittest.MockLogger)
     def test___init___(self):
 
         daemon = service.Daemon()
@@ -60,6 +63,19 @@ class TestService(unittest.TestCase):
         self.assertEqual(daemon.channel, "stuff")
         self.assertEqual(daemon.chore_api, "http://boast.com")
         self.assertEqual(daemon.sleep, 0.7)
+
+        self.assertEqual(daemon.logger.name, "nandy-io-chore-button-daemon")
+
+        self.assertLogged(daemon.logger, "debug", "init", extra={
+            "init": {
+                "sleep": 0.7,
+                "chore_api": "http://boast.com",
+                "redis": {
+                    "connection": "MockRedis<host=most.com,port=667>",
+                    "channel": "stuff"
+                }
+            }
+        })
 
     def test_subscribe(self):
 
@@ -151,6 +167,12 @@ class TestService(unittest.TestCase):
         self.daemon.process()
         self.daemon.process()
 
+        self.assertLogged(self.daemon.logger, "debug", "get_message", extra={
+            "get_message": {
+                "data": 1
+            }
+        })
+
         self.daemon.process()
         mock_get.assert_has_calls([
             unittest.mock.call("http://boast.com/routine?status=opened"),
@@ -160,6 +182,15 @@ class TestService(unittest.TestCase):
             unittest.mock.call("http://boast.com/routine/1/next"),
             unittest.mock.call().raise_for_status()
         ])
+
+        self.assertLogged(self.daemon.logger, "info", "data", extra={
+            "data": {
+                "type": "rising",
+                "node": "bump"
+            }
+        })
+
+        self.assertLogged(self.daemon.logger, "info", "next")
 
     @unittest.mock.patch("requests.get")
     @unittest.mock.patch("requests.patch")
