@@ -10,7 +10,7 @@ import requests
 
 import klotio
 
-class Daemon(object):
+class Daemon:
     """
     Main class for daemon
     """
@@ -48,6 +48,9 @@ class Daemon(object):
         self.pubsub.subscribe(self.channel)
 
     def node(self, routine):
+        """
+        Looks up node from routine or person
+        """
 
         if "node" in routine.get("chore-button.nandy.io", {}):
             return routine["chore-button.nandy.io"]["node"]
